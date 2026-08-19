@@ -6,7 +6,6 @@ import { routes } from './app.routes';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 
-
 // Registra os dados de formatação para o português do Brasil
 registerLocaleData(localePt, 'pt-BR');
 
@@ -18,6 +17,9 @@ export const appConfig: ApplicationConfig = {
     providePrimeNG({
       theme: {
         preset: Aura,
+        options: {
+          darkModeSelector: '',
+        },
       },
     }),
   ],
