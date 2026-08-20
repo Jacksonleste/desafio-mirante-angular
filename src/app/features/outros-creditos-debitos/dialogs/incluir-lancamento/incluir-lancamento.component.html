@@ -1,0 +1,101 @@
+<p-dialog
+  header="Incluir Lançamento"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '50rem' }"
+  (onHide)="onFechar()"
+>
+  <form [formGroup]="form">
+
+    <fieldset formGroupName="contaCorrente" class="border p-4 rounded mb-4">
+      <legend class="font-semibold px-2">Conta Corrente</legend>
+
+      <div class="flex gap-2 items-end mb-3">
+        <div class="flex-1">
+          <label class="text-sm font-medium block mb-1">Conta Corrente *</label>
+          <input pInputText formControlName="contaCorrente" />
+        </div>
+        <p-button icon="pi pi-search" (onClick)="buscarConta()" [loading]="buscandoConta()" />
+        <div class="flex-1">
+          <input pInputText formControlName="nomeTitular" placeholder="Nome do titular" />
+        </div>
+      </div>
+      @if (contaNaoEncontrada()) {
+        <small class="text-red-600 block mb-2">Conta não localizada.</small>
+      }
+
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div>
+          <label class="text-sm font-medium block mb-1">Valor *</label>
+          <p-inputNumber formControlName="valor" mode="currency" currency="BRL" locale="pt-BR" />
+          @if (form.controls.contaCorrente.controls.valor.invalid && form.controls.contaCorrente.controls.valor.touched) {
+            <small class="text-red-600 block">Valor deve ser maior que zero.</small>
+          }
+        </div>
+        <div>
+          <label class="text-sm font-medium block mb-1">Histórico *</label>
+          <p-select formControlName="historico" [options]="historicoOptions()" />
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 mb-3">
+        <p-checkbox formControlName="estorno" [binary]="true" inputId="estorno" />
+        <label for="estorno">Estorno</label>
+      </div>
+
+      <div class="mb-3">
+        <label class="text-sm font-medium block mb-1">Documento *</label>
+        <input pInputText formControlName="documento" />
+      </div>
+
+      <div class="mb-3">
+        <label class="text-sm font-medium block mb-1">Descrição</label>
+        <textarea pTextarea formControlName="descricao" rows="3"></textarea>
+      </div>
+
+      <div>
+        <label class="text-sm font-medium block mb-1">Situação</label>
+        <input pInputText [value]="situacaoContaFixa" disabled />
+      </div>
+
+      @if (form.controls.contaCorrente.errors?.['contaNaoLocalizada']) {
+        <small class="text-red-600 block mt-2">É necessário buscar e localizar a conta antes de confirmar.</small>
+      }
+    </fieldset>
+
+    <fieldset formGroupName="documentoCsc" class="border p-4 rounded mb-4">
+      <legend class="font-semibold px-2">Documento CSC</legend>
+
+      <div class="mb-3">
+        <label class="text-sm font-medium block mb-1">PA *</label>
+        <p-select formControlName="pa" [options]="paOptions()" />
+      </div>
+
+      <div class="mb-3">
+        <label class="text-sm font-medium block mb-1">ID Evento</label>
+        <input pInputText formControlName="idEvento" />
+      </div>
+
+      <div class="mb-3">
+        <label class="text-sm font-medium block mb-1">Compl. Histórico *</label>
+        <textarea pTextarea formControlName="complHistorico" rows="2"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="text-sm font-medium block mb-1">ID Doc CSC</label>
+        <input pInputText formControlName="idDocCsc" />
+      </div>
+
+      <div>
+        <label class="text-sm font-medium block mb-1">Situação</label>
+        <input pInputText [value]="situacaoCscFixa" disabled />
+      </div>
+    </fieldset>
+
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Fechar" severity="secondary" (onClick)="onFechar()" />
+    <p-button label="Incluir" (onClick)="onConfirmar()" />
+  </ng-template>
+</p-dialog>

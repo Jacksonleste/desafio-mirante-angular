@@ -5,15 +5,15 @@ import { HISTORICO_OPTIONS, PA_OPTIONS, INSTITUICAO_OPTIONS } from '../mocks/sel
 
 @Injectable({ providedIn: 'root' })
 export class OpcoesFormularioService {
-  listarHistoricos(): Observable<readonly string[]> {
+  listarHistoricos(): Observable<string[]> {
     return of(HISTORICO_OPTIONS).pipe(delay(200));
   }
 
-  listarPA(): Observable<readonly string[]> {
+  listarPA(): Observable<string[]> {
     return of(PA_OPTIONS).pipe(delay(200));
   }
 
-  listarInstituicoes(): Observable<readonly { codigo: string; descricao: string }[]> {
+  listarInstituicoes(): Observable<{ codigo: string; descricao: string }[]> {
     return of(INSTITUICAO_OPTIONS).pipe(delay(200));
   }
 }

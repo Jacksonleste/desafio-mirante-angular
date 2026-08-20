@@ -10,9 +10,11 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './barra-acoes-lote.component.html',
 })
 export class BarraAcoesLoteComponent {
+  @Input() podeIncluir = false;
   @Input() podeAlterar = false;
   @Input() podeExcluir = false;
   @Input() podeVisualizar = false;
+
 
   @Output() confirmar = new EventEmitter<void>();
   @Output() enviar = new EventEmitter<void>();

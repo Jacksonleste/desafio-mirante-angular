@@ -1,1 +1,43 @@
-<p>consulta-lotes works!</p>
+<div class="p-4">
+  <header class="mb-4">
+    <h1 class="text-xl font-semibold">Outros Créditos/Débitos</h1>
+    <nav class="text-sm text-gray-500">Início &gt; Outros Créditos/Débitos</nav>
+  </header>
+
+  <app-filtro-lotes (pesquisar)="onPesquisar($event)" />
+
+  <app-barra-acoes-lote
+    [podeIncluir]="umLoteSelecionado()"
+    [podeAlterar]="umLoteSelecionado()"
+    [podeExcluir]="umLoteSelecionado()"
+    [podeVisualizar]="umLoteSelecionado()"
+    (incluir)="onIncluir()"
+    (alterar)="onAlterar()"
+    (excluir)="onExcluir()"
+    (visualizar)="onVisualizar()"
+    (confirmar)="onConfirmar()"
+    (enviar)="onEnviar()"
+    (visualizarJustificativa)="onVisualizarJustificativa()"
+  />
+
+  <app-data-table
+    id="tabela-lotes"
+    [data]="lotes()"
+    [columns]="columns"
+    dataKey="idLote"
+    [totalRecords]="totalRecords()"
+    [loading]="loading()"
+    [selection]="selecionados()"
+    (selectionChange)="onSelectionChange($event)"
+    (pageChange)="onPageChange($event)"
+  />
+</div>
+
+@if (loteSelecionadoParaIncluir(); as idLote) {
+  <app-incluir-lancamento
+    [visible]="modalVisivel()"
+    [idLote]="idLote"
+    (visibleChange)="modalVisivel.set($event)"
+    (lancamentoConfirmado)="onLancamentoConfirmado($event)"
+  />
+}
