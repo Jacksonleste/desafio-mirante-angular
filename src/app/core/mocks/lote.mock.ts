@@ -1,100 +1,91 @@
-import { Lote, SituacaoLote } from "../models/lote.model";
+import { Lote, SituacaoLote } from '../models/lote.model';
 
-export const LOTES_MOCK: Lote[] = [
-  {
-    idLote: 1,
-    instituicaoResp: '0001 - COOPERATIVA CENTRAL',
-    instituicao: '0002 - SICOOB CENTRAL',
-    dataEntrada: new Date('2026-08-10'),
-    valor: 15420.50,
-    quantLancamentos: 3,
-    usuarioRegistro: 'jsilva0001_30',
-    usuarioAprovacao: 'mferreira0002_15',
-    situacaoLote: SituacaoLote.Confirmado,
-    dataHoraSituacaoLote: new Date('2026-08-10T14:32:00'),
-  },
-  {
-    idLote: 2,
-    instituicaoResp: '0001 - COOPERATIVA CENTRAL',
-    instituicao: '0003 - SICOOB VALE',
-    dataEntrada: new Date('2026-08-12'),
-    valor: 8900.00,
-    quantLancamentos: 2,
-    usuarioRegistro: 'amoraes0001_22',
-    usuarioAprovacao: null,
-    situacaoLote: SituacaoLote.Enviado,
-    dataHoraSituacaoLote: new Date('2026-08-12T09:15:00'),
-  },
-  {
-    idLote: 3,
-    instituicaoResp: '0001 - COOPERATIVA CENTRAL',
-    instituicao: '0002 - SICOOB CENTRAL',
-    dataEntrada: new Date('2026-08-14'),
-    valor: 3200.75,
-    quantLancamentos: 1,
-    usuarioRegistro: 'pgomes0001_18',
-    usuarioAprovacao: null,
-    situacaoLote: SituacaoLote.Aberto,
-    dataHoraSituacaoLote: new Date('2026-08-14T16:47:00'),
-  },
-  {
-    idLote: 4,
-    instituicaoResp: '0004 - SICOOB NORTE',
-    instituicao: '0002 - SICOOB CENTRAL',
-    dataEntrada: new Date('2026-08-15'),
-    valor: 27300.00,
-    quantLancamentos: 3,
-    usuarioRegistro: 'rteixeira0004_11',
-    usuarioAprovacao: 'jsilva0001_30',
-    situacaoLote: SituacaoLote.Confirmado,
-    dataHoraSituacaoLote: new Date('2026-08-15T11:20:00'),
-  },
-  {
-    idLote: 5,
-    instituicaoResp: '0001 - COOPERATIVA CENTRAL',
-    instituicao: '0002 - SICOOB CENTRAL',
-    dataEntrada: new Date('2026-08-16'),
-    valor: 670.20,
-    quantLancamentos: 1,
-    usuarioRegistro: 'lcardoso0001_09',
-    usuarioAprovacao: null,
-    situacaoLote: SituacaoLote.Aberto,
-    dataHoraSituacaoLote: new Date('2026-08-16T08:05:00'),
-  },
-  {
-    idLote: 6,
-    instituicaoResp: '0004 - SICOOB NORTE',
-    instituicao: '0003 - SICOOB VALE',
-    dataEntrada: new Date('2026-08-17'),
-    valor: 12850.90,
-    quantLancamentos: 2,
-    usuarioRegistro: 'fbarros0002_44',
-    usuarioAprovacao: null,
-    situacaoLote: SituacaoLote.Enviado,
-    dataHoraSituacaoLote: new Date('2026-08-17T13:58:00'),
-  },
-  {
-    idLote: 7,
-    instituicaoResp: '0001 - COOPERATIVA CENTRAL',
-    instituicao: '0002 - SICOOB CENTRAL',
-    dataEntrada: new Date('2026-08-05'),
-    valor: 990.00,
-    quantLancamentos: 1,
-    usuarioRegistro: 'gsantos0001_30',
-    usuarioAprovacao: 'mferreira0002_15',
-    situacaoLote: SituacaoLote.Confirmado,
-    dataHoraSituacaoLote: new Date('2026-08-05T17:40:00'),
-  },
-  {
-    idLote: 8,
-    instituicaoResp: '0001 - COOPERATIVA CENTRAL',
-    instituicao: '0002 - SICOOB CENTRAL',
-    dataEntrada: new Date('2026-08-18'),
-    valor: 0,
-    quantLancamentos: 0,
-    usuarioRegistro: 'jsilva0001_30',
-    usuarioAprovacao: null,
-    situacaoLote: SituacaoLote.Aberto,
-    dataHoraSituacaoLote: new Date('2026-08-18T10:00:00'),
-  },
+/** Nomes de instituições fictícias, sorteados tanto para a instituição respondente quanto para a instituição do lote. */
+const INSTITUICOES = [
+  '0001 - COOPERATIVA CENTRAL',
+  '0002 - SICOOB CENTRAL',
+  '0003 - SICOOB VALE',
+  '0004 - SICOOB NORTE',
+  '0005 - SICOOB SUL',
 ];
+
+/** Logins fictícios (no padrão usuário + matrícula do sistema real) usados como usuário de registro/aprovação. */
+const USUARIOS = [
+  'jsilva0001_30', 'mferreira0002_15', 'amoraes0001_22', 'pgomes0001_18',
+  'rteixeira0004_11', 'lcardoso0001_09', 'fbarros0002_44', 'gsantos0001_30',
+];
+
+/** Situações sorteáveis para os lotes mock — cobrem os três valores do enum `SituacaoLote`. */
+const SITUACOES: SituacaoLote[] = [SituacaoLote.Aberto, SituacaoLote.Enviado, SituacaoLote.Confirmado];
+
+/**
+ * Gerador pseudo-aleatório com seed fixa (LCG simples). Preferido a `Math.random()` aqui porque
+ * garante os mesmos dados mock a cada execução e a cada teste — sem isso, testes que dependem de
+ * valores específicos do mock ficariam "flaky".
+ * @param seed valor inicial que determina toda a sequência gerada
+ * @returns função que produz o próximo número pseudo-aleatório entre 0 e 1 a cada chamada
+ */
+function criarGeradorSeed(seed: number) {
+  let estado = seed;
+  return () => {
+    estado = (estado * 1103515245 + 12345) & 0x7fffffff;
+    return estado / 0x7fffffff;
+  };
+}
+
+/** Instância compartilhada do gerador seedado usada por todo este arquivo (seed 42, arbitrária). */
+const aleatorio = criarGeradorSeed(42);
+
+/** Sorteia um item da lista usando o gerador seedado, em vez de `Math.random()`. */
+function escolher<T>(lista: readonly T[]): T {
+  return lista[Math.floor(aleatorio() * lista.length)];
+}
+
+/** Sorteia um número dentro do intervalo `[min, max]`, arredondado a 2 casas — usado para valores monetários. */
+function numeroEntre(min: number, max: number): number {
+  return Math.round((min + aleatorio() * (max - min)) * 100) / 100;
+}
+
+/**
+ * Sorteia uma data até `diasAtras` dias antes de uma data-âncora fixa (não `new Date()` atual),
+ * pra que o conjunto de dados mock não mude conforme os dias passam.
+ */
+function dataEntre(diasAtras: number): Date {
+  const hoje = new Date('2026-08-19');
+  const dias = Math.floor(aleatorio() * diasAtras);
+  const data = new Date(hoje);
+  data.setDate(data.getDate() - dias);
+  return data;
+}
+
+/** Quantidade de lotes gerados para o mock — arbitrária, só precisa ser grande o suficiente pra exercitar a paginação. */
+const TOTAL_LOTES = 32;
+
+/**
+ * Lotes fictícios gerados na carga do módulo. Algumas regras de negócio são simuladas de propósito:
+ * lotes "Aberto" têm 15% de chance de não ter nenhum lançamento ainda, e só recebem `usuarioAprovacao`
+ * quando saem do estado "Aberto" (refletindo que a aprovação ainda não ocorreu).
+ */
+export const LOTES_MOCK: Lote[] = Array.from({ length: TOTAL_LOTES }, (_, i) => {
+  const idLote = i + 1;
+  const situacaoLote = escolher(SITUACOES);
+  const loteVazio = situacaoLote === SituacaoLote.Aberto && aleatorio() < 0.15;
+  const quantLancamentos = loteVazio ? 0 : Math.floor(numeroEntre(1, 5));
+  const dataEntrada = dataEntre(45);
+  const dataHoraSituacaoLote = new Date(
+    dataEntrada.getTime() + Math.floor(aleatorio() * 3) * 86400000 + Math.floor(aleatorio() * 24) * 3600000
+  );
+
+  return {
+    idLote,
+    instituicaoResp: escolher(INSTITUICOES),
+    instituicao: escolher(INSTITUICOES),
+    dataEntrada,
+    valor: numeroEntre(150, 45000),
+    quantLancamentos,
+    usuarioRegistro: escolher(USUARIOS),
+    usuarioAprovacao: situacaoLote === SituacaoLote.Aberto ? null : escolher(USUARIOS),
+    situacaoLote,
+    dataHoraSituacaoLote,
+  };
+});
