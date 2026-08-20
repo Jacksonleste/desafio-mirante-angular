@@ -1,0 +1,56 @@
+<p-panel header="Pesquisar Lote Outros Créditos/Débitos" [toggleable]="true" styleClass="mb-4">
+  <form [formGroup]="form" (ngSubmit)="onPesquisar()" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+    <div class="flex flex-col gap-1">
+      <label for="instituicaoResp" class="text-sm font-medium">Instituição Resp.</label>
+      <input pInputText id="instituicaoResp" formControlName="instituicaoResp" />
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="instituicao" class="text-sm font-medium">Instituição</label>
+      <input pInputText id="instituicao" formControlName="instituicao" />
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="situacaoLote" class="text-sm font-medium">Situação Lote</label>
+      <p-select id="situacaoLote" formControlName="situacaoLote" [options]="situacaoOptions" />
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <span class="text-sm font-medium">ID Lote</span>
+      <div class="flex gap-2">
+        <p-inputNumber formControlName="idLoteDe" placeholder="De" [useGrouping]="false" />
+        <p-inputNumber formControlName="idLoteAte" placeholder="Até" [useGrouping]="false" />
+      </div>
+      @if (form.errors?.['idLoteFaixaInvalida'] && (form.touched || form.dirty)) {
+        <small class="text-red-600">"De" não pode ser maior que "Até".</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <span class="text-sm font-medium">Valor Lote</span>
+      <div class="flex gap-2">
+        <p-inputNumber formControlName="valorLoteDe" placeholder="De" mode="currency" currency="BRL" locale="pt-BR" />
+        <p-inputNumber formControlName="valorLoteAte" placeholder="Até" mode="currency" currency="BRL" locale="pt-BR" />
+      </div>
+      @if (form.errors?.['valorLoteFaixaInvalida'] && (form.touched || form.dirty)) {
+        <small class="text-red-600">"De" não pode ser maior que "Até".</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <span class="text-sm font-medium">Data Entrada</span>
+      <div class="flex gap-2">
+        <p-datepicker formControlName="dataEntradaDe" placeholder="De" dateFormat="dd/mm/yy" />
+        <p-datepicker formControlName="dataEntradaAte" placeholder="Até" dateFormat="dd/mm/yy" />
+      </div>
+      @if (form.errors?.['dataEntradaFaixaInvalida'] && (form.touched || form.dirty)) {
+        <small class="text-red-600">"De" não pode ser maior que "Até".</small>
+      }
+    </div>
+
+    <div class="md:col-span-3 flex justify-end">
+      <p-button label="Pesquisar" type="submit" />
+    </div>
+  </form>
+</p-panel>
