@@ -1,0 +1,9 @@
+<div class="flex flex-wrap gap-2 mb-4">
+  <p-button label="Confirmar" (onClick)="confirmar.emit()" severity="success" />
+  <p-button label="Enviar" (onClick)="enviar.emit()" />
+  <p-button label="Visualizar Justificativa" (onClick)="visualizarJustificativa.emit()" severity="secondary" />
+  <p-button label="Incluir" (onClick)="incluir.emit()" />
+  <p-button label="Alterar" (onClick)="alterar.emit()" [disabled]="!podeAlterar" />
+  <p-button label="Excluir" (onClick)="excluir.emit()" severity="danger" [disabled]="!podeExcluir" />
+  <p-button label="Visualizar" (onClick)="visualizar.emit()" severity="secondary" [disabled]="!podeVisualizar" />
+</div>
