@@ -34,7 +34,7 @@ export class ConsultaLotesComponent {
   readonly selecionados = signal<Lote[]>([]);
 
   private filtroAtual: FiltroLotePesquisa = {};
-  private paginacaoAtual: PaginacaoRequest = { first: 0, rows: 5 };
+  protected paginacaoAtual: PaginacaoRequest = { first: 0, rows: 5 };
 
   readonly umLoteSelecionado = computed(() => this.selecionados().length === 1);
 
@@ -99,6 +99,7 @@ export class ConsultaLotesComponent {
 
   private buscarLotes(): void {
     this.loading.set(true);
+    this.lotes.set([]);
     this.loteService.pesquisar(this.filtroAtual, this.paginacaoAtual).subscribe((resposta) => {
       this.lotes.set(resposta.data);
       this.totalRecords.set(resposta.totalRecords);

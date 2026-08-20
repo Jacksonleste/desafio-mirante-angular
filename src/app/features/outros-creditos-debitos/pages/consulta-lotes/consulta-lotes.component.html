@@ -23,6 +23,8 @@
   <app-data-table
     id="tabela-lotes"
     [data]="lotes()"
+    [rows]="paginacaoAtual.rows"
+    [first]="paginacaoAtual.first"
     [columns]="columns"
     dataKey="idLote"
     [totalRecords]="totalRecords()"
