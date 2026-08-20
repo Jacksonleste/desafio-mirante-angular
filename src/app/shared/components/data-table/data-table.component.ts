@@ -1,21 +1,22 @@
+import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
+  ContentChild,
   EventEmitter,
   Input,
   Output,
-  ContentChild,
   TemplateRef,
-  ChangeDetectionStrategy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { TableModule, TableLazyLoadEvent } from 'primeng/table';
-import { ColumnDef } from './column-def.model';
+import { SkeletonModule } from 'primeng/skeleton';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { PaginacaoRequest } from '../../models/paginacao.model';
+import { ColumnDef } from './column-def.model';
 
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [CommonModule, TableModule],
+  imports: [CommonModule, TableModule, SkeletonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './data-table.component.html',
 })
@@ -37,6 +38,10 @@ export class DataTableComponent<T extends object> {
     $implicit: T;
     column: ColumnDef<T>;
   }>;
+
+  get skeletonRows(): number[] {
+    return Array.from({ length: this.rows });
+  }
 
   onSelectionChange(novaSelecao: T[]): void {
     this.selectionChange.emit(novaSelecao);

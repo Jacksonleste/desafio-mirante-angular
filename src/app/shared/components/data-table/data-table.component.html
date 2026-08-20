@@ -61,6 +61,23 @@
     </tr>
   </ng-template>
 
+  <ng-template pTemplate="loadingbody">
+    @for (row of skeletonRows; track $index) {
+      <tr>
+        @if (selectionMode === 'multiple' || selectionMode === 'single') {
+          <td>
+            <p-skeleton />
+          </td>
+        }
+        @for (col of columns; track col.field) {
+          <td>
+            <p-skeleton />
+          </td>
+        }
+      </tr>
+    }
+  </ng-template>
+
   <ng-template pTemplate="emptymessage">
     <tr>
       <td [attr.colspan]="columns.length + 1" class="text-center py-4 text-gray-500">
