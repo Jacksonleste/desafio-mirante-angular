@@ -1,2 +1,13 @@
 @use "tailwindcss";
 @use "primeicons/primeicons.css";
+
+/* Esconder o ícone de carregamento da tabela de lotes  */
+
+#tabela-lotes .p-datatable-loading-icon {
+    display: none !important;
+}
+
+/* Alternar cursor do cabeçalho do painel quando ele for clicável */
+p-panel[toggler='header'] .p-panel-header {
+  cursor: pointer;
+}

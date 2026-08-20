@@ -1,4 +1,7 @@
-<p-panel header="Pesquisar Lote Outros Créditos/Débitos" [toggleable]="true" styleClass="mb-4">
+<p-panel header="Pesquisar Lote Outros Créditos/Débitos" [toggleable]="true" [collapsed]="true" toggler="header" class="mb-4">
+  <ng-template #headericons let-collapsed>
+    <span class="pi" [class.pi-chevron-down]="collapsed" [class.pi-chevron-up]="!collapsed"></span>
+  </ng-template>
   <form [formGroup]="form" (ngSubmit)="onPesquisar()" class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
     <div class="flex flex-col gap-1">
