@@ -17,7 +17,7 @@ describe('ConsultaLotesComponent', () => {
     await fixture.whenStable();
   });
 
-  it('should create', () => {
+  it('deve ser criado', () => {
     expect(component).toBeTruthy();
   });
 });
