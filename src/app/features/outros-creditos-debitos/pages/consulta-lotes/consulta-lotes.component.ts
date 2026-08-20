@@ -34,7 +34,7 @@ export class ConsultaLotesComponent {
   readonly selecionados = signal<Lote[]>([]);
 
   private filtroAtual: FiltroLotePesquisa = {};
-  protected paginacaoAtual: PaginacaoRequest = { first: 0, rows: 5 };
+  protected paginacaoAtual: PaginacaoRequest = { first: 0, rows: 10 };
 
   readonly umLoteSelecionado = computed(() => this.selecionados().length === 1);
 
@@ -100,6 +100,7 @@ export class ConsultaLotesComponent {
   private buscarLotes(): void {
     this.loading.set(true);
     this.lotes.set([]);
+    this.selecionados.set([]);
     this.loteService.pesquisar(this.filtroAtual, this.paginacaoAtual).subscribe((resposta) => {
       this.lotes.set(resposta.data);
       this.totalRecords.set(resposta.totalRecords);
@@ -112,7 +113,7 @@ export class ConsultaLotesComponent {
       const quantidade = this.lancamentoService.contarPorLote(lancamento.idLote);
       this.loteService.atualizarQuantLancamentos(lancamento.idLote, quantidade);
       this.modalVisivel.set(false);
-      this.buscarLotes(); // rebusca pra refletir o quantLancamentos atualizado na tabela
+      this.buscarLotes();
     });
   }
 }
