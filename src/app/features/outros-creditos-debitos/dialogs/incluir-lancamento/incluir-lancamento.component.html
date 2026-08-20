@@ -20,6 +20,9 @@
           <input pInputText formControlName="nomeTitular" placeholder="Nome do titular" />
         </div>
       </div>
+      @if (form.controls.contaCorrente.controls.contaCorrente.errors?.['required'] && form.controls.contaCorrente.controls.contaCorrente.touched) {
+        <small class="text-red-600 block mb-2">Conta corrente é obrigatória.</small>
+      }
       @if (contaNaoEncontrada()) {
         <small class="text-red-600 block mb-2">Conta não localizada.</small>
       }
@@ -28,13 +31,18 @@
         <div>
           <label class="text-sm font-medium block mb-1">Valor *</label>
           <p-inputNumber formControlName="valor" mode="currency" currency="BRL" locale="pt-BR" />
-          @if (form.controls.contaCorrente.controls.valor.invalid && form.controls.contaCorrente.controls.valor.touched) {
+          @if (form.controls.contaCorrente.controls.valor.errors?.['required'] && form.controls.contaCorrente.controls.valor.touched) {
+            <small class="text-red-600 block">Valor é obrigatório.</small>
+          } @else if (form.controls.contaCorrente.controls.valor.errors?.['min'] && form.controls.contaCorrente.controls.valor.touched) {
             <small class="text-red-600 block">Valor deve ser maior que zero.</small>
           }
         </div>
         <div>
           <label class="text-sm font-medium block mb-1">Histórico *</label>
           <p-select formControlName="historico" [options]="historicoOptions()" />
+          @if (form.controls.contaCorrente.controls.historico.errors?.['required'] && form.controls.contaCorrente.controls.historico.touched) {
+            <small class="text-red-600 block">Histórico é obrigatório.</small>
+          }
         </div>
       </div>
 
@@ -46,6 +54,9 @@
       <div class="mb-3">
         <label class="text-sm font-medium block mb-1">Documento *</label>
         <input pInputText formControlName="documento" />
+        @if (form.controls.contaCorrente.controls.documento.errors?.['required'] && form.controls.contaCorrente.controls.documento.touched) {
+          <small class="text-red-600 block">Documento é obrigatório.</small>
+        }
       </div>
 
       <div class="mb-3">
@@ -69,6 +80,9 @@
       <div class="mb-3">
         <label class="text-sm font-medium block mb-1">PA *</label>
         <p-select formControlName="pa" [options]="paOptions()" />
+        @if (form.controls.documentoCsc.controls.pa.errors?.['required'] && form.controls.documentoCsc.controls.pa.touched) {
+          <small class="text-red-600 block">PA é obrigatório.</small>
+        }
       </div>
 
       <div class="mb-3">
@@ -79,6 +93,9 @@
       <div class="mb-3">
         <label class="text-sm font-medium block mb-1">Compl. Histórico *</label>
         <textarea pTextarea formControlName="complHistorico" rows="2"></textarea>
+        @if (form.controls.documentoCsc.controls.complHistorico.errors?.['required'] && form.controls.documentoCsc.controls.complHistorico.touched) {
+          <small class="text-red-600 block">Complemento do histórico é obrigatório.</small>
+        }
       </div>
 
       <div class="mb-3">

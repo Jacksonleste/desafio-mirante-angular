@@ -119,6 +119,9 @@ export class IncluirLancamentoComponent {
   }
 
   onFechar(): void {
+    this.form.reset();
+    this.buscandoConta.set(false);
+    this.contaNaoEncontrada.set(false);
     this.visible = false;
     this.visibleChange.emit(false);
   }
