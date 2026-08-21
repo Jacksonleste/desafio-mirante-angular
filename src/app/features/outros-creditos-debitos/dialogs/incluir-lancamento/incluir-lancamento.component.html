@@ -5,111 +5,121 @@
   [style]="{ width: '50rem' }"
   (onHide)="onFechar()"
 >
-  <form [formGroup]="form">
-
-    <fieldset formGroupName="contaCorrente" class="border p-4 rounded mb-4">
-      <legend class="font-semibold px-2">Conta Corrente</legend>
-
-      <div class="flex gap-2 items-end mb-3">
-        <div class="flex-1">
-          <label class="text-sm font-medium block mb-1">Conta Corrente *</label>
-          <input pInputText formControlName="contaCorrente" />
+  <p-fluid>
+    <form [formGroup]="form">
+      <fieldset formGroupName="contaCorrente" class="border border-gray-200 p-4 rounded mb-4">
+        <legend class="font-semibold px-2 text-gray-800">Conta Corrente</legend>
+        <div class="flex gap-2 items-end mb-3">
+          <div class="flex-1">
+            <label class="text-sm font-medium block mb-1">Conta Corrente *</label>
+            <input pInputText formControlName="contaCorrente" />
+          </div>
+          <p-button icon="pi pi-search" (onClick)="buscarConta()" [loading]="buscandoConta()" />
+          <div class="flex-1">
+            <input pInputText formControlName="nomeTitular" placeholder="Nome do titular" />
+          </div>
         </div>
-        <p-button icon="pi pi-search" (onClick)="buscarConta()" [loading]="buscandoConta()" />
-        <div class="flex-1">
-          <input pInputText formControlName="nomeTitular" placeholder="Nome do titular" />
+        @if (
+          form.controls.contaCorrente.controls.contaCorrente.errors?.['required'] &&
+          form.controls.contaCorrente.controls.contaCorrente.touched
+        ) {
+          <small class="text-red-600 block mb-2">Conta corrente é obrigatória.</small>
+        }
+        @if (contaNaoEncontrada()) {
+          <small class="text-red-600 block mb-2">Conta não localizada.</small>
+        }
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label class="text-sm font-medium block mb-1">Valor *</label>
+            <p-inputNumber formControlName="valor" mode="currency" currency="BRL" locale="pt-BR" />
+            @if (
+              form.controls.contaCorrente.controls.valor.errors?.['required'] &&
+              form.controls.contaCorrente.controls.valor.touched
+            ) {
+              <small class="text-red-600 block">Valor é obrigatório.</small>
+            } @else if (
+              form.controls.contaCorrente.controls.valor.errors?.['min'] &&
+              form.controls.contaCorrente.controls.valor.touched
+            ) {
+              <small class="text-red-600 block">Valor deve ser maior que zero.</small>
+            }
+          </div>
+          <div>
+            <label class="text-sm font-medium block mb-1">Histórico *</label>
+            <p-select formControlName="historico" [options]="historicoOptions()" />
+            @if (
+              form.controls.contaCorrente.controls.historico.errors?.['required'] &&
+              form.controls.contaCorrente.controls.historico.touched
+            ) {
+              <small class="text-red-600 block">Histórico é obrigatório.</small>
+            }
+          </div>
         </div>
-      </div>
-      @if (form.controls.contaCorrente.controls.contaCorrente.errors?.['required'] && form.controls.contaCorrente.controls.contaCorrente.touched) {
-        <small class="text-red-600 block mb-2">Conta corrente é obrigatória.</small>
-      }
-      @if (contaNaoEncontrada()) {
-        <small class="text-red-600 block mb-2">Conta não localizada.</small>
-      }
-
-      <div class="grid grid-cols-2 gap-3 mb-3">
-        <div>
-          <label class="text-sm font-medium block mb-1">Valor *</label>
-          <p-inputNumber formControlName="valor" mode="currency" currency="BRL" locale="pt-BR" />
-          @if (form.controls.contaCorrente.controls.valor.errors?.['required'] && form.controls.contaCorrente.controls.valor.touched) {
-            <small class="text-red-600 block">Valor é obrigatório.</small>
-          } @else if (form.controls.contaCorrente.controls.valor.errors?.['min'] && form.controls.contaCorrente.controls.valor.touched) {
-            <small class="text-red-600 block">Valor deve ser maior que zero.</small>
+        <div class="flex items-center gap-2 mb-3">
+          <p-checkbox formControlName="estorno" [binary]="true" inputId="estorno" />
+          <label for="estorno">Estorno</label>
+        </div>
+        <div class="mb-3">
+          <label class="text-sm font-medium block mb-1">Documento *</label>
+          <input pInputText formControlName="documento" />
+          @if (
+            form.controls.contaCorrente.controls.documento.errors?.['required'] &&
+            form.controls.contaCorrente.controls.documento.touched
+          ) {
+            <small class="text-red-600 block">Documento é obrigatório.</small>
           }
         </div>
+        <div class="mb-3">
+          <label class="text-sm font-medium block mb-1">Descrição</label>
+          <textarea pTextarea formControlName="descricao" rows="3"></textarea>
+        </div>
         <div>
-          <label class="text-sm font-medium block mb-1">Histórico *</label>
-          <p-select formControlName="historico" [options]="historicoOptions()" />
-          @if (form.controls.contaCorrente.controls.historico.errors?.['required'] && form.controls.contaCorrente.controls.historico.touched) {
-            <small class="text-red-600 block">Histórico é obrigatório.</small>
+          <label class="text-sm font-medium block mb-1">Situação</label>
+          <input pInputText [value]="situacaoContaFixa" disabled />
+        </div>
+        @if (form.controls.contaCorrente.errors?.['contaNaoLocalizada']) {
+          <small class="text-red-600 block mt-2"
+            >É necessário buscar e localizar a conta antes de confirmar.</small
+          >
+        }
+      </fieldset>
+      <fieldset formGroupName="documentoCsc" class="border border-gray-200 p-4 rounded mb-4">
+        <legend class="font-semibold px-2">Documento CSC</legend>
+        <div class="mb-3">
+          <label class="text-sm font-medium block mb-1">PA *</label>
+          <p-select formControlName="pa" [options]="paOptions()" />
+          @if (
+            form.controls.documentoCsc.controls.pa.errors?.['required'] &&
+            form.controls.documentoCsc.controls.pa.touched
+          ) {
+            <small class="text-red-600 block">PA é obrigatório.</small>
           }
         </div>
-      </div>
-
-      <div class="flex items-center gap-2 mb-3">
-        <p-checkbox formControlName="estorno" [binary]="true" inputId="estorno" />
-        <label for="estorno">Estorno</label>
-      </div>
-
-      <div class="mb-3">
-        <label class="text-sm font-medium block mb-1">Documento *</label>
-        <input pInputText formControlName="documento" />
-        @if (form.controls.contaCorrente.controls.documento.errors?.['required'] && form.controls.contaCorrente.controls.documento.touched) {
-          <small class="text-red-600 block">Documento é obrigatório.</small>
-        }
-      </div>
-
-      <div class="mb-3">
-        <label class="text-sm font-medium block mb-1">Descrição</label>
-        <textarea pTextarea formControlName="descricao" rows="3"></textarea>
-      </div>
-
-      <div>
-        <label class="text-sm font-medium block mb-1">Situação</label>
-        <input pInputText [value]="situacaoContaFixa" disabled />
-      </div>
-
-      @if (form.controls.contaCorrente.errors?.['contaNaoLocalizada']) {
-        <small class="text-red-600 block mt-2">É necessário buscar e localizar a conta antes de confirmar.</small>
-      }
-    </fieldset>
-
-    <fieldset formGroupName="documentoCsc" class="border p-4 rounded mb-4">
-      <legend class="font-semibold px-2">Documento CSC</legend>
-
-      <div class="mb-3">
-        <label class="text-sm font-medium block mb-1">PA *</label>
-        <p-select formControlName="pa" [options]="paOptions()" />
-        @if (form.controls.documentoCsc.controls.pa.errors?.['required'] && form.controls.documentoCsc.controls.pa.touched) {
-          <small class="text-red-600 block">PA é obrigatório.</small>
-        }
-      </div>
-
-      <div class="mb-3">
-        <label class="text-sm font-medium block mb-1">ID Evento</label>
-        <input pInputText formControlName="idEvento" />
-      </div>
-
-      <div class="mb-3">
-        <label class="text-sm font-medium block mb-1">Compl. Histórico *</label>
-        <textarea pTextarea formControlName="complHistorico" rows="2"></textarea>
-        @if (form.controls.documentoCsc.controls.complHistorico.errors?.['required'] && form.controls.documentoCsc.controls.complHistorico.touched) {
-          <small class="text-red-600 block">Complemento do histórico é obrigatório.</small>
-        }
-      </div>
-
-      <div class="mb-3">
-        <label class="text-sm font-medium block mb-1">ID Doc CSC</label>
-        <input pInputText formControlName="idDocCsc" />
-      </div>
-
-      <div>
-        <label class="text-sm font-medium block mb-1">Situação</label>
-        <input pInputText [value]="situacaoCscFixa" disabled />
-      </div>
-    </fieldset>
-
-  </form>
+        <div class="mb-3">
+          <label class="text-sm font-medium block mb-1">ID Evento</label>
+          <input pInputText formControlName="idEvento" />
+        </div>
+        <div class="mb-3">
+          <label class="text-sm font-medium block mb-1">Compl. Histórico *</label>
+          <textarea pTextarea formControlName="complHistorico" rows="2"></textarea>
+          @if (
+            form.controls.documentoCsc.controls.complHistorico.errors?.['required'] &&
+            form.controls.documentoCsc.controls.complHistorico.touched
+          ) {
+            <small class="text-red-600 block">Complemento do histórico é obrigatório.</small>
+          }
+        </div>
+        <div class="mb-3">
+          <label class="text-sm font-medium block mb-1">ID Doc CSC</label>
+          <input pInputText formControlName="idDocCsc" />
+        </div>
+        <div>
+          <label class="text-sm font-medium block mb-1">Situação</label>
+          <input pInputText [value]="situacaoCscFixa" disabled />
+        </div>
+      </fieldset>
+    </form>
+  </p-fluid>
 
   <ng-template pTemplate="footer">
     <p-button label="Fechar" severity="secondary" (onClick)="onFechar()" />

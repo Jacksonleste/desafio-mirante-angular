@@ -9,6 +9,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { faixaValidaValidator } from './filtro-lotes.validators';
 import { FiltroLotePesquisa, SituacaoLote } from '../../../../core/models/lote.model';
+import { Fluid } from "primeng/fluid";
 
 @Component({
   selector: 'app-filtro-lotes',
@@ -16,7 +17,8 @@ import { FiltroLotePesquisa, SituacaoLote } from '../../../../core/models/lote.m
   imports: [
     CommonModule, ReactiveFormsModule, PanelModule, InputTextModule,
     SelectModule, InputNumberModule, DatePickerModule, ButtonModule,
-  ],
+    Fluid
+],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './filtro-lotes.component.html',
 })
@@ -64,5 +66,9 @@ export class FiltroLotesComponent {
     };
 
     this.pesquisar.emit(filtro);
+  }
+
+  onLimpar(): void {
+    this.form.reset();
   }
 }

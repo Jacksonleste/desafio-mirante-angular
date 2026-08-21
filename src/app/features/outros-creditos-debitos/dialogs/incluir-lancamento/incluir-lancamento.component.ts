@@ -12,6 +12,7 @@ import { ContaCorrenteService } from '../../../../core/services/conta-corrente.s
 import { Lancamento } from '../../../../core/models/lancamento.model';
 import { contaLocalizadaValidator } from './incluir-lancamento.validators';
 import { OpcoesFormularioService } from '../../../../core/services/opcoes.formulario.service';
+import { Fluid } from "primeng/fluid";
 
 @Component({
   selector: 'app-incluir-lancamento',
@@ -19,7 +20,8 @@ import { OpcoesFormularioService } from '../../../../core/services/opcoes.formul
   imports: [
     CommonModule, ReactiveFormsModule, DialogModule, InputTextModule,
     InputNumberModule, SelectModule, CheckboxModule, TextareaModule, ButtonModule,
-  ],
+    Fluid
+],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './incluir-lancamento.component.html',
 })

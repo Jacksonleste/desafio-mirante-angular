@@ -1,8 +1,14 @@
 @use "tailwindcss";
 @use "primeicons/primeicons.css";
 
-/* Esconder o ícone de carregamento da tabela de lotes  */
+@layer theme, base, primeng, utilities;
 
+/* Fundo cinza claro da página, pra destacar o card de conteúdo em branco */
+body {
+  background-color: #f3f4f6;
+}
+
+/* Esconder o ícone de carregamento da tabela de lotes  */
 #tabela-lotes .p-datatable-loading-icon {
     display: none !important;
 }
