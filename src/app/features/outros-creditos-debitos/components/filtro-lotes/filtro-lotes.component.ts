@@ -46,6 +46,11 @@ export class FiltroLotesComponent {
     { validators: [faixaValidaValidator] }
   );
 
+  /**
+   * Dispara a pesquisa de lotes com base nos critérios preenchidos no formulário.
+   * Se o formulário estiver inválido, marca todos os campos como tocados para exibir mensagens de erro.
+   * @returns - Retorna void. Emite o evento `pesquisar` com os critérios de pesquisa preenchidos no formulário.
+   */
   onPesquisar(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -68,6 +73,10 @@ export class FiltroLotesComponent {
     this.pesquisar.emit(filtro);
   }
 
+  /**
+   * Limpa todos os campos do formulário de filtro de lotes, resetando seus valores para o estado inicial.
+   * @returns - Retorna void. Reseta o formulário para seus valores iniciais.
+   */
   onLimpar(): void {
     this.form.reset();
   }

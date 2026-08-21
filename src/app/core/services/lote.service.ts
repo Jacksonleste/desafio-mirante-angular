@@ -9,6 +9,12 @@ import { LOTES_MOCK } from '../mocks/lote.mock';
 export class LoteService {
   private readonly lotes = signal<Lote[]>(structuredClone(LOTES_MOCK));
 
+  /**
+   * Pesquisa lotes com base em filtros e paginação.
+   * @param filtro - Os critérios de filtro para a pesquisa de lotes.
+   * @param paginacao - Os parâmetros de paginação, incluindo o índice inicial e o número de registros por página.
+   * @returns - Retorna um Observable que emite um objeto contendo os lotes filtrados e o total de registros encontrados, após um atraso simulado de 600ms.
+   */
   pesquisar(
     filtro: FiltroLotePesquisa,
     paginacao: PaginacaoRequest
@@ -19,12 +25,23 @@ export class LoteService {
     return of({ data: pagina, totalRecords: filtrados.length }).pipe(delay(600));
   }
 
+  /**
+   * Atualiza a quantidade de lançamentos associados a um determinado lote.
+   * @param idLote - O ID do lote para o qual atualizar a quantidade de lançamentos.
+   * @param quantidade - A nova quantidade de lançamentos.
+   */
   atualizarQuantLancamentos(idLote: number, quantidade: number): void {
     this.lotes.update((lotes) =>
       lotes.map((l) => (l.idLote === idLote ? { ...l, quantLancamentos: quantidade } : l))
     );
   }
 
+  /**
+   * Aplica os filtros fornecidos a uma lista de lotes.
+   * @param lotes - A lista de lotes a ser filtrada.
+   * @param filtro -  Os critérios de filtro a serem aplicados.
+   * @returns - Retorna a lista de lotes filtrada.
+   */
   private aplicarFiltro(lotes: Lote[], filtro: FiltroLotePesquisa): Lote[] {
     return lotes.filter((lote) => {
       if (filtro.instituicaoResp && !lote.instituicaoResp.includes(filtro.instituicaoResp)) return false;

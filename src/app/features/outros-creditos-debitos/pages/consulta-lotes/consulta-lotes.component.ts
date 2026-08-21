@@ -56,21 +56,41 @@ export class ConsultaLotesComponent {
     this.buscarLotes();
   }
 
+  /**
+   * Atualiza o filtro atual com os valores fornecidos e reinicia a paginação para a primeira página.
+   * @param filtro - Objeto contendo os critérios de filtro para a pesquisa de lotes.
+   * @returns void
+   */
   onPesquisar(filtro: FiltroLotePesquisa): void {
     this.filtroAtual = filtro;
     this.paginacaoAtual = { first: 0, rows: this.paginacaoAtual.rows };
     this.buscarLotes();
   }
 
+  /**
+   * Atualiza a paginação atual e busca os lotes de acordo com o filtro e paginação atualizados.
+   * @param paginacao - Objeto contendo os parâmetros de paginação (first e rows).
+   * @returns void
+   */
   onPageChange(paginacao: PaginacaoRequest): void {
     this.paginacaoAtual = paginacao;
     this.buscarLotes();
   }
 
+  /**
+   * Atualiza a seleção de lotes com base na seleção feita na tabela.
+   * @param selecao - Array de lotes selecionados na tabela.
+   * @returns void
+   */
   onSelectionChange(selecao: Lote[]): void {
     this.selecionados.set(selecao);
   }
 
+  /**
+   * Abre o modal de inclusão de lançamento para o lote selecionado.
+   * Se nenhum lote estiver selecionado, o modal não será aberto.
+   * @returns void
+   */
   onIncluir(): void {
     const lote = this.selecionados()[0];
     if (!lote) return;
@@ -78,9 +98,18 @@ export class ConsultaLotesComponent {
     this.modalVisivel.set(true);
   }
 
+  /**
+   * Exibe os detalhes do lote selecionado para alteração.
+   * @returns void
+   */
   onAlterar(): void {
     console.log('Alterar', this.selecionados());
   }
+
+  /**
+   * Exclui o(s) lote(s) selecionado(s).
+   * @returns void
+   */
   onExcluir(): void {
     console.log('Excluir', this.selecionados());
   }
@@ -97,6 +126,11 @@ export class ConsultaLotesComponent {
     console.log('Visualizar Justificativa');
   }
 
+  /**
+   * Busca os lotes de acordo com o filtro e paginação atuais, atualizando os sinais correspondentes.
+   * Este método é chamado sempre que o filtro ou a paginação são alterados.
+   * Ele também limpa a seleção atual de lotes.
+   */
   private buscarLotes(): void {
     this.loading.set(true);
     this.lotes.set([]);
@@ -108,6 +142,12 @@ export class ConsultaLotesComponent {
     });
   }
 
+  /**
+   * Ao confirmar a inclusão de um lançamento, este método é chamado para incluir o lançamento no serviço de lançamentos.
+   * Após a inclusão, ele atualiza a quantidade de lançamentos do lote correspondente e fecha o modal de inclusão.
+   * Em seguida, ele busca novamente os lotes para refletir as alterações.
+   * @param lancamento - O lançamento a ser incluído, sem o campo 'idLancamento' que será gerado pelo serviço.
+   */
   onLancamentoConfirmado(lancamento: Omit<Lancamento, 'idLancamento'>): void {
     this.lancamentoService.incluir(lancamento).subscribe(() => {
       const quantidade = this.lancamentoService.contarPorLote(lancamento.idLote);

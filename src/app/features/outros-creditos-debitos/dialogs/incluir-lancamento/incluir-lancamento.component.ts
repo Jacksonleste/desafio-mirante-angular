@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
@@ -12,16 +20,23 @@ import { ContaCorrenteService } from '../../../../core/services/conta-corrente.s
 import { Lancamento } from '../../../../core/models/lancamento.model';
 import { contaLocalizadaValidator } from './incluir-lancamento.validators';
 import { OpcoesFormularioService } from '../../../../core/services/opcoes.formulario.service';
-import { Fluid } from "primeng/fluid";
+import { Fluid } from 'primeng/fluid';
 
 @Component({
   selector: 'app-incluir-lancamento',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, DialogModule, InputTextModule,
-    InputNumberModule, SelectModule, CheckboxModule, TextareaModule, ButtonModule,
-    Fluid
-],
+    CommonModule,
+    ReactiveFormsModule,
+    DialogModule,
+    InputTextModule,
+    InputNumberModule,
+    SelectModule,
+    CheckboxModule,
+    TextareaModule,
+    ButtonModule,
+    Fluid,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './incluir-lancamento.component.html',
 })
@@ -56,7 +71,7 @@ export class IncluirLancamentoComponent {
         documento: ['', Validators.required],
         descricao: [''],
       },
-      { validators: [contaLocalizadaValidator] }
+      { validators: [contaLocalizadaValidator] },
     ),
     documentoCsc: this.fb.nonNullable.group({
       pa: ['', Validators.required],
@@ -67,10 +82,16 @@ export class IncluirLancamentoComponent {
   });
 
   constructor() {
-    this.opcoesService.listarHistoricos().subscribe((valores) => this.historicoOptions.set(valores));
+    this.opcoesService
+      .listarHistoricos()
+      .subscribe((valores) => this.historicoOptions.set(valores));
     this.opcoesService.listarPA().subscribe((valores) => this.paOptions.set(valores));
   }
 
+  /**
+   * Busca a conta corrente informada no formulário e atualiza o campo de nome do titular.
+   * @returns - Retorna void. Se a conta for encontrada, o campo de nome do titular será preenchido; caso contrário, será exibida uma mensagem de erro.
+   */
   buscarConta(): void {
     const grupo = this.form.controls.contaCorrente;
     const numero = grupo.controls.contaCorrente.value;
@@ -90,6 +111,11 @@ export class IncluirLancamentoComponent {
     });
   }
 
+  /**
+   * Confirma o lançamento de crédito/débito com os dados preenchidos no formulário.
+   * Se o formulário estiver inválido, marca todos os campos como tocados para exibir mensagens de erro.
+   * @returns - Retorna void. Emite o evento `lancamentoConfirmado` com os dados do lançamento, reseta o formulário e limpa os estados de busca e erro.
+   */
   onConfirmar(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -120,6 +146,10 @@ export class IncluirLancamentoComponent {
     this.form.reset();
   }
 
+  /**
+   * Fecha o diálogo de inclusão de lançamento, reseta o formulário e limpa os estados de busca e erro.
+   * @returns - Retorna void. Emite o evento `visibleChange` com o valor `false` para indicar que o diálogo foi fechado.
+   */
   onFechar(): void {
     this.form.reset();
     this.buscandoConta.set(false);

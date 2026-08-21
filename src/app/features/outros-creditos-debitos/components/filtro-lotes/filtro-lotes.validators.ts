@@ -3,6 +3,8 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 /**
  * Validador customizado: garante que os valores "De" não sejam
  * maiores que os valores "Até" em cada uma das três faixas do filtro.
+ * @param control - O controle de formulário que contém os campos a serem validados.
+ * @returns - Retorna um objeto de erros de validação se houver faixas inválidas, ou null se todas as faixas forem válidas.
  */
 export function faixaValidaValidator(control: AbstractControl): ValidationErrors | null {
   const grupo = control;
